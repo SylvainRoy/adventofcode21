@@ -1,0 +1,91 @@
+
+digit   #seg    segs        uniq
+0       6       a b c . e f g  
+1       2       . . c . . f .     x
+2       5       a . c d e . g
+3       5       a . c d . f g
+4       4       . b c d . f .     x
+5       5       a b . d . f g
+6       6       a b . d e f g
+7       3       a . c . . f .     x
+8       7       a b c d e f g     x       
+9       6       a b c d . f g   
+
+0 - a: 8
+1 - b: 6 -  ok
+2 - c: 8
+3 - d: 7
+4 - e: 4 -  ok
+5 - f: 9 -  ok
+6 - g: 7 
+
+in(7) - in(1)       = indigits(3) and indigits(2)   => a
+total(6)                                            => b
+total(8) ^ in(1)    = total(8) and indigits(2)      => c
+total(7) ^ in(4)    = total(7) and indigits(4)      => d
+total(4)                                            => e
+total(9)                                            => f
+total(7) ^ -in(4)   = total(7) and not indigits(4)  => g
+
+
+pseudo-code:
+============
+
+total = sum
+
+// b, e and f can identified based on the number of occurences.
+for segment, occurences in total:
+    if occurences == 6: tran[segment] = 1                               // b 
+    if occurences == 4: tran[segment] = 4                               // e
+    if occurences == 9: tran[segment] = 5                               // f
+
+// c is the only segment in the '1' that appears 8 times
+// d is the only segment in the '4' that appears 7 times
+for display in displays:
+    #seg = count(display.segments)
+    if #seg == 2: // it's a '1'
+        for segment in display.segments:
+            if display.segments[segment] == 1 and total(segment) == 8:
+                tran[segment] = 2                                       // c
+                break
+    if #seg == 4: // it's a '4'
+        for segment in display.segments:
+            if display.segments[segment] == 1 and total(segment) == 7:
+                tran[segment] = 3                                       // d
+
+// g is only segment left that appears 7 times
+for segment in segments:
+    if total[segment] == 7 and tran[segment].empty():
+        trans.segment[segment] = 6                                      // g
+        break
+
+// a is the only segment left
+for segment in segments:
+    if tran[segment].empty():
+        trans.segment[segment] = 0                                      // a
+        break
+        
+
+input:
+======
+
+abdfce bedag acdefgb cg febcga fbdac fcdg cabdg bcg bgacdf | fdcab adbcf gcb acdebf
+
+display: Vec<bool>;
+seg: bool
+
+fn decode(display: &str) -> &[]
+
+
+Manual:
+=======
+
+abdfce bedag acdefgb cg febcga fbdac fcdg cabdg bcg bgacdf | fdcab adbcf gcb acdebf
+
+0  a: 7                         -> g=6
+1  b: 8                                 -> a=0
+2  c: 9 -> f=5
+3  d: 7                 -> d=3
+4  e: 4 -> e=4
+5  f: 6 -> b=1
+6  g: 8         -> c=2

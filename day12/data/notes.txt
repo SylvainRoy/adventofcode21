@@ -1,0 +1,2 @@
+Part 1 - paths: 3292
+Part 2 - paths: 89592

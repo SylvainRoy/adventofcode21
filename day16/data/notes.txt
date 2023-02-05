@@ -1,0 +1,2 @@
+Part 1 - sum versions:  984
+Part 2 - eval:  1015320896946
